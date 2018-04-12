@@ -15,3 +15,22 @@ h1, h2, h3, h4, h5 {
 	font-weight: 400;
 	font-size: 46px;
 }
+.result {
+	display: flex;
+	flex-direction: column;
+}
+.search-result {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.meta {
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: column;
+}
+.get-tweet-button {
+	align-self: flex-end;
+	padding: 10px;
+	size: 10px;
+}

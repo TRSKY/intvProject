@@ -16,4 +16,7 @@ Uses Webpack to bundle static assets and babel to compile React code.
 ### To get MongoDB going:
 -	pip install Flask-PyMongo
 
+### To interact with the Twitter API:
+-	pip install oauth2
+
 

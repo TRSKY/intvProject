@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+    const webpack = require('webpack');
 
 const config = {
     entry:  __dirname + '/js/index.jsx',
@@ -17,7 +17,13 @@ const config = {
 	      use: 'babel-loader'
 	    }
 	  ]
-	}
+	},
+    plugins: [
+        new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery"
+        })
+      ]
 };
 
 module.exports = config;
