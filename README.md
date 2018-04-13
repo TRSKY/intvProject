@@ -1,10 +1,8 @@
-# flask-react-skeletoncode
+# Related Tweet Finder
 
-Skeleton code for a web-app using flask and react. 
-Uses Webpack to bundle static assets and babel to compile React code. 
+Search for the latest news articles returned with the Bing API, and find 10 most popular tweets related to mentions returned by the Bing API for each article.
 
-## Note: 
-- Need to have flask installed to run. 
+
 
 ## Setup Commands:
 ### Should be run in the static folder: 
@@ -12,9 +10,10 @@ Uses Webpack to bundle static assets and babel to compile React code.
 -   npm i webpack --save-dev
 -	npm i babel-core babel-loader babel-preset-env babel-preset-react --save-dev
 -	npm i react react-dom --save-dev
-- 	npm i react-tweet
+- 	npm i react-tweet --save-dev
 
 ### To get MongoDB going:
+-	pip install flask
 -	pip install Flask-PyMongo
 
 ### To interact with the Twitter API:
