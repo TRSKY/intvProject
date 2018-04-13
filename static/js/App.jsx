@@ -27,7 +27,7 @@ export default class App extends React.Component {
 		    data: form,
 		    success: function(status) {
 		    	this.setState({hasResult: true, response: JSON.parse(status)})
-		    }.bind(this)
+		    }.bind(this),
   		})
   	}
   	getImage(item) {
@@ -43,6 +43,7 @@ export default class App extends React.Component {
 	render () {
 		return (
 			<div className="page">
+				<LoadingWheel class="hidden"/>
 				<div className="container">
 					<h1 className="title">{this.state.title}</h1>
 				</div>
@@ -76,7 +77,7 @@ class SearchResult extends React.Component {
 		console.log("we get tweets")
 		console.log(this.props.mentions)
 		if (!this.props.mentions) {
-			this.setState({hasTweets: false, showTweets: false})
+			this.setState({hasTweets: false, showTweets: false, showLoadingWheel: false})
 			return
 		} 
 		console.log("we come here")
@@ -91,14 +92,22 @@ class SearchResult extends React.Component {
 		   	contentType: false,
 		   	processData: false,
 		    data: form,
+		    beforeSend: function() {
+		    	// display loading wheel
+		    	this.setState({hasTweets: true, showTweets: false, showLoadingWheel: true})
+		    	console.log(this.state.showLoadingWheel)
+		    }.bind(this),
 		    success: function(status) {
 		    	var found_tweets = JSON.parse(status)
 		    	if (found_tweets.length === 0) {
-		    		this.setState({hasTweets: false, showTweets: true})
+		    		this.setState({hasTweets: false, showTweets: true, showLoadingWheel: false})
 		    	} else {
-		    		this.setState({tweets: JSON.parse(status), hasTweets: true, showTweets: true})
+		    		this.setState({tweets: JSON.parse(status), hasTweets: true, showTweets: true, relayError: false, showLoadingWheel: false})
 		    	}
 		    	
+		    }.bind(this),
+		    error: function() {
+		    	this.setState({relayError: true, showLoadingWheel: false})
 		    }.bind(this)
   		})
 	}
@@ -121,6 +130,8 @@ class SearchResult extends React.Component {
 						<button className="get-tweet-button" onClick={this.getTweets}>Get Tweets</button>
 					</div>
 				</div>
+					{this.state.showLoadingWheel ? <LoadingWheel class="loading-wheel" />: null}
+					{this.state.relayError ? <ErrorMessage /> : null}
 					{this.state.hasTweets ? <div className={this.state.showTweets ? "tweet-container": "tweet-container hidden"}>
 						{this.state.tweets.map(function(item, i) {
 							return <Tweet key={i} data={item} linkProps={linkProps} />
@@ -131,4 +142,12 @@ class SearchResult extends React.Component {
 			</div>
 		)
 	}
+}
+
+function LoadingWheel(props) {
+	return <div className="centered-elem"><img  className={props.class} src="/static/img/Spinner-1s-200px.svg"/></div>
+}
+
+function ErrorMessage() {
+	return <p> There was an error processing your request, please try again </p>
 }

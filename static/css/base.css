@@ -97,5 +97,12 @@ a {
 .headline {
 	font-weight: normal;
 	font-size: 20px;
-
+}
+.centered-elem {
+	display: flex;
+	align-items: center;
+	justify-content: center
+}
+.loading-wheel {
+	height: 60px;
 }

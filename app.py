@@ -7,6 +7,7 @@ import urllib2
 import oauth2
 import requests
 from bson.json_util import dumps
+import time #to test the loading wheel reliably 
 
 
 
@@ -48,7 +49,7 @@ def get_tweets(): #the query should be a list of key words
 
 def check_for_tweet(query):
 	#returns the cursor object that will have the last tweet or be empty
-	ans = mongo.db.tweets.find({"query_string": query}).sort("id", -1 ).limit(1)
+	ans = mongo.db.tweets.find({"query_string": query, "retweeted_status": { "$exists" : False }}).sort("id", -1 ).limit(1)
 	return ans
 
 
@@ -102,7 +103,7 @@ def did_update(id_, query): #returns a boolean #both inputs are strings
 		return False
 
 def get_tweets_from_db(query): #reads query in the db
-	return mongo.db.tweets.find({"query_string": query}).sort("retweet_count", -1).limit(10)
+	return mongo.db.tweets.find({"query_string": query, "retweeted_status": { "$exists" : False }}).sort("retweet_count", -1).limit(10)
 
 def oauth_req(url, key, secret, consumer_key, consumer_secret, http_method="GET", post_body="", http_headers=None): #returns?
     consumer = oauth2.Consumer(consumer_key, consumer_secret)
