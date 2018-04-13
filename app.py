@@ -16,7 +16,7 @@ mongo = PyMongo(app)
 
 TARGET_TWITTER_URL = "https://api.twitter.com/1.1/search/tweets.json"
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['GET'])
 def index():
 	return render_template('index.html')
 
