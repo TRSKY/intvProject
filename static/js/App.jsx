@@ -1,16 +1,13 @@
 import React from "react";
+import Tweet from 'react-tweet'
 
 export default class App extends React.Component {
 	constructor(props) {
 	    super(props);
-	    this.state = {title: "Realted Tweet Finder", value: ""};
-	    this.testTwitter = this.testTwitter.bind(this)
+	    this.state = {title: "Related Tweet Finder", value: ""};
 	    this.handleSearchChange = this.handleSearchChange.bind(this)
 	    this.submitSearch = this.submitSearch.bind(this)
 
-  	}
-  	testTwitter(e) {
-  		
   	}
   	handleSearchChange(e) {
   		e.preventDefault()
@@ -33,21 +30,29 @@ export default class App extends React.Component {
 		    }.bind(this)
   		})
   	}
+  	getImage(item) {
+  		var image_dict = item.image
+  		if (item.image) {
+  			var thumbnail_dict = image_dict.thumbnail
+  			if (thumbnail_dict) {
+  				return thumbnail_dict.contentUrl
+  			} 
+  		}
+  		return "/static/img/placeholder.png"
+  	}
 	render () {
 		return (
 			<div className="page">
 				<div className="container">
 					<h1 className="title">{this.state.title}</h1>
 				</div>
-				<div className="button" onClick={this.testTwitter}>Twitter Test Button</div>
-				<div className="search-container">
+				<form className="search-container" onSubmit={this.submitSearch}>
 					<input type="text" placeholder="Enter Query" value={this.state.value} className="search-input" onChange={this.handleSearchChange}/>
-					<input type="submit" className="submit-button" onClick={this.submitSearch} value="Submit"/> 
-				</div>
+				</form>
 				<div className="result-container">
 					{this.state.hasResult ? 
 						this.state.response.map(function(item, i) {
-							return <SearchResult index={i} url={item.url} mentions={item.mentions} headline={item.name} description={item.description} img_src={item.image.thumbnail.contentUrl}/>
+							return <SearchResult key={i} url={item.url} mentions={item.mentions} headline={item.name} description={item.description} img_src={this.getImage(item)}/>
 						}.bind(this)) 
 						:
 						null
@@ -61,14 +66,20 @@ class SearchResult extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.getTweets = this.getTweets.bind(this)
-	    this.state = {tweets: []}
+	    this.state = {tweets: [], hasTweets: true, showTweets: false, headline: this.props.headline}
 	}
-	getTweets() {
+	getTweets(e) {
 		// parse the mentions
 		// build a query out of them 
 		// send them to the server to get the tweets
 		e.preventDefault()
 		console.log("we get tweets")
+		console.log(this.props.mentions)
+		if (!this.props.mentions) {
+			this.setState({hasTweets: false, showTweets: false})
+			return
+		} 
+		console.log("we come here")
 		var mentionList = this.props.mentions.map(function(item, i) {return item.name})
 		var query = mentionList.join(" ")
   		var form = new FormData()
@@ -81,24 +92,42 @@ class SearchResult extends React.Component {
 		   	processData: false,
 		    data: form,
 		    success: function(status) {
-		    	this.setState({tweets: JSON.parse(status)})
+		    	var found_tweets = JSON.parse(status)
+		    	if (found_tweets.length === 0) {
+		    		this.setState({hasTweets: false, showTweets: true})
+		    	} else {
+		    		this.setState({tweets: JSON.parse(status), hasTweets: true, showTweets: true})
+		    	}
+		    	
 		    }.bind(this)
   		})
 	}
+	static getDerivedStateFromProps(nextProps, prevState) {
+		if (nextProps.headline !== prevState.headline) {
+			return {tweets: [], hasTweets: true, showTweets: false}
+		} else {
+			return null
+		}
+	}
 	render () {
+		const linkProps = {target: '_blank', rel: 'noreferrer'}
 		return (
-			<div className='result' key={this.props.index}>
+			<div className='result'>
 				<div className="search-result">
 					<img src={this.props.img_src} className="result-image"/>
 					<div className="meta">
 						<a href={this.props.url} target="_blank"><h3 className="headline">{this.props.headline}</h3></a>
 						<p className="description">{this.props.description}</p>
+						<button className="get-tweet-button" onClick={this.getTweets}>Get Tweets</button>
 					</div>
 				</div>
-				<button className="get-tweet-button" onClick={this.getTweets}>Get Tweet</button>
-				<div className="tweet-container">
-
-				</div>
+					{this.state.hasTweets ? <div className={this.state.showTweets ? "tweet-container": "tweet-container hidden"}>
+						{this.state.tweets.map(function(item, i) {
+							return <Tweet key={i} data={item} linkProps={linkProps} />
+						}.bind(this)) }
+						</div> :
+						<p> No mentions to relate to </p>
+					}
 			</div>
 		)
 	}

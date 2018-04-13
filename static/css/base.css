@@ -6,18 +6,62 @@ html, body {
 h1, h2, h3, h4, h5 {
 	margin: 0;
 }
+a {
+	text-decoration: none;
+}
 .container {
-	margin: 20px 2%;
 	padding: 0 15px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #0084b4;
+}
+.search-container {
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.search-input {
+	padding: 9px 18px;
+	border-radius: 20px;
+	border: 1px solid  #0084b4;
+	width: 35%;
+	min-width: 300px;
+	max-width: 500px;
+	font-size: 17px;
+	color: black;
+}
+.search-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #00aced;
+}
+.search-input::-moz-placeholder { /* Firefox 19+ */
+  color: #00aced;
+}
+.search-input:-ms-input-placeholder { /* IE 10+ */
+  color: #00aced;
+}
+.search-input:-moz-placeholder { /* Firefox 18- */
+  color: #00aced;
+}
+.page {
+	margin:20px 2%;
 }
 .title {
 	font-weight: 400;
 	font-size: 46px;
 }
+
 .result {
+	padding: 15px;
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 30px;
+	box-shadow: 2px 3px 30px rgba(0, 0, 0, 0.05);
+	border-radius: 10px;
+}
+.result-image {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	width: 100px;
+	height: 100px;
 }
 .search-result {
 	display: flex;
@@ -28,9 +72,30 @@ h1, h2, h3, h4, h5 {
 	display: flex;
 	justify-content: flex-start;
 	flex-flow: column;
+	margin-left: 15px;
 }
 .get-tweet-button {
 	align-self: flex-end;
-	padding: 10px;
-	size: 10px;
+	padding: 4px;
+	font-size: 11px;
+	background: white;
+	border: 1px solid #00aced;
+	border-radius: 3px;
+	color:  #0084b4;
+}
+.tweet-container {
+	display: flex;
+	overflow-x: auto;
+}
+.hidden {
+	display: none;
+}
+.description {
+	margin: 5px 0;
+	font-size: 15px;
+}
+.headline {
+	font-weight: normal;
+	font-size: 20px;
+
 }

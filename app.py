@@ -79,7 +79,7 @@ def did_update(id_, query): #returns a boolean #both inputs are strings
 	print id_
 	values = {'q': query,
           'result_type': 'recent',
-          'count': '1', 
+          'count': '30', 
           'since_id': id_}
 
   	query_string = urllib.urlencode(values)
