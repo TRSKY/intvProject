@@ -12,6 +12,7 @@ Uses Webpack to bundle static assets and babel to compile React code.
 -   npm i webpack --save-dev
 -	npm i babel-core babel-loader babel-preset-env babel-preset-react --save-dev
 -	npm i react react-dom --save-dev
+- 	npm i react-tweet
 
 ### To get MongoDB going:
 -	pip install Flask-PyMongo
